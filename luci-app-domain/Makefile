@@ -1,8 +1,6 @@
 # DOMAIN LuCI App Makefile
-# Copyright (c) 2024 DOMAIN Maintainers
+# Copyright (c) 2026 DOMAIN Maintainers
 # Licensed under the Apache License 2.0
-
-include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=DOMAIN Management Interface
 LUCI_DEPENDS:=+luci \
@@ -26,18 +24,8 @@ PKG_RELEASE:=2
 PKG_NAME:=luci-app-domain
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=DOMAIN Maintainers <maintainers@domain.org>
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
-include $(INCLUDE_DIR)/package.mk
-
-define Package/luci-app-domain
-  SECTION:=luci
-  CATEGORY:=LuCI
-  SUBMENU:=3. Applications
-  TITLE:=DOMAIN Management Interface
-  URL:=https://github.com/domain/luci-app-domain
-  PKGARCH:=all
-endef
+include $(TOPDIR)/feeds/luci/luci.mk
 
 define Package/luci-app-domain/config
 config PACKAGE_luci-app-domain:SQLITE_SUPPORT
@@ -76,17 +64,12 @@ define Package/luci-app-domain/conffiles
 /usr/lib/domain/
 endef
 
-define Build/Configure
-endef
-
 define Build/Compile
 	$(call Build/Compile/luci,i18n)
 endef
 
 define Package/luci-app-domain/install
-	# LuCI application files
-	$(INSTALL_DIR) $(1)/usr/lib/lua/luci
-	cp -pR ./luasrc/* $(1)/usr/lib/lua/luci/
+	$(call Package/luci-app-domain/install-defaults)
 	
 	# Static web files
 	$(INSTALL_DIR) $(1)/www/luci-static/resources/domain
@@ -234,5 +217,3 @@ define Package/luci-app-domain/postrm
 	rmdir /etc/domain 2>/dev/null || true
 }
 endef
-
-$(eval $(call BuildPackage,luci-app-domain))
