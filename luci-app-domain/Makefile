@@ -61,16 +61,25 @@ define Package/luci-app-domain/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./root/etc/init.d/domain $(1)/etc/init.d/
 	
-	# 可执行文件
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) ./root/usr/bin/domain* $(1)/usr/bin/
+	# 安装 ddns 脚本
+	$(INSTALL_DIR) $(1)/usr/lib/domain
+	$(INSTALL_BIN) ./root/usr/lib/domain/generate_haproxy_config.sh $(1)/usr/lib/domain/
+
+	# 安装 domain 脚本
+	$(INSTALL_DIR) $(1)/usr/lib/domain
+	$(INSTALL_BIN) ./root/usr/lib/domain/generate_haproxy_config.sh $(1)/usr/lib/domain/
+
+	# 安装 rpcd ACL
+	$(INSTALL_DIR) $(1)/usr/share/rpcd/acl.d
+	$(INSTALL_DATA) ./root/usr/share/rpcd/acl.d/domain.json $(1)/usr/share/rpcd/acl.d/
 	
 	# 数据目录
 	$(INSTALL_DIR) $(1)/etc/domain/{certs,data,backup,logs,tmp}
 	
 	# 设置权限
 	find $(1)/etc/init.d -type f -exec chmod 755 {} \;
-	find $(1)/usr/bin -type f -exec chmod 755 {} \;
+	find $(1)/usr/lib/ddns -type f -exec chmod 755 {} \;
+	find $(1)/usr/lib/domain -type f -exec chmod 755 {} \;
 	find $(1)/etc/config -type f -exec chmod 644 {} \;
 	find $(1)/etc/domain -type d -exec chmod 750 {} \;
 	chmod 700 $(1)/etc/domain/certs
@@ -114,3 +123,4 @@ define Package/luci-app-domain/postrm
 endef
 
 $(eval $(call BuildPackage,luci-app-domain))
+
