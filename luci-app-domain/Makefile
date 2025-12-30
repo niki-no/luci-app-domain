@@ -50,8 +50,8 @@ define Package/luci-app-domain/install
 	
 	# 静态资源
 	$(INSTALL_DIR) $(1)/www/luci-static/resources/domain
-	$(INSTALL_DATA) ./htdocs/*.css $(1)/www/luci-static/resources/domain/
-	$(INSTALL_DATA) ./htdocs/*.js $(1)/www/luci-static/resources/domain/
+	$(INSTALL_DATA) ./htdocs/css/*.css $(1)/www/luci-static/resources/domain/
+	$(INSTALL_DATA) ./htdocs/js/*.js $(1)/www/luci-static/resources/domain/
 	
 	# 配置文件
 	$(INSTALL_DIR) $(1)/etc/config
@@ -123,4 +123,5 @@ define Package/luci-app-domain/postrm
 endef
 
 $(eval $(call BuildPackage,luci-app-domain))
+
 
