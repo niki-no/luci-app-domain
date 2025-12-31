@@ -77,11 +77,12 @@ define Package/luci-app-domain/install
 	$(INSTALL_DIR) $(1)/etc/domain/{certs,data,backup,logs,tmp}
 	
 	# 设置权限
-	find $(1)/etc/init.d -type f -exec chmod 755 {} \;
-	find $(1)/usr/lib/ddns -type f -exec chmod 755 {} \;
-	find $(1)/usr/lib/domain -type f -exec chmod 755 {} \;
-	find $(1)/etc/config -type f -exec chmod 644 {} \;
-	find $(1)/etc/domain -type d -exec chmod 750 {} \;
+	find $(1)/etc/init.d -type f -exec chmod 755 {} \; 2>/dev/null || true
+	find $(1)/usr/lib/ddns -type f -exec chmod 755 {} \; 2>/dev/null || true
+	find $(1)/usr/lib/domain -type f -exec chmod 755 {} \; 2>/dev/null || true
+	find $(1)/etc/config -type f -exec chmod 644 {} \; 2>/dev/null || true
+	find $(1)/etc/domain -type d -exec chmod 750 {} \; 2>/dev/null || true
+	mkdir -p $(1)/etc/domain/certs
 	chmod 700 $(1)/etc/domain/certs
 endef
 
@@ -123,5 +124,3 @@ define Package/luci-app-domain/postrm
 endef
 
 $(eval $(call BuildPackage,luci-app-domain))
-
-
