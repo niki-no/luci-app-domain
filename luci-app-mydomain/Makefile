@@ -1,4 +1,3 @@
-# package/luci-app-mydomain/Makefile
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-mydomain
@@ -48,5 +47,6 @@ define Package/luci-app-mydomain/install
 	$(INSTALL_DIR) $(1)/usr/share/rpcd/acl.d
 	$(INSTALL_DATA) ./root/usr/share/rpcd/acl.d/luci-app-mydomain.json $(1)/usr/share/rpcd/acl.d/luci-app-mydomain.json
 endef
+
 
 $(eval $(call BuildPackage,luci-app-mydomain))
