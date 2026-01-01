@@ -1,11 +1,8 @@
-# package/luci-app-mydomain/Makefile
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-mydomain
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 define Package/luci-app-mydomain
   SECTION:=luci
@@ -18,12 +15,6 @@ endef
 
 define Package/luci-app-mydomain/description
   LuCI Support for MyDomain Manager - Dynamic DNS, Reverse Proxy and Certificate Management
-endef
-
-define Build/Configure
-endef
-
-define Build/Compile
 endef
 
 define Package/luci-app-mydomain/install
@@ -52,6 +43,3 @@ define Package/luci-app-mydomain/install
 endef
 
 include $(TOPDIR)/feeds/luci/luci.mk
-
-
-
