@@ -8,6 +8,7 @@ PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
+include $(TOPDIR)/feeds/luci/luci.mk
 
 define Package/luci-app-mydomain
   SECTION:=luci
@@ -54,4 +55,5 @@ define Package/luci-app-mydomain/install
 endef
 
 $(eval $(call BuildPackage,luci-app-mydomain))
+
 
