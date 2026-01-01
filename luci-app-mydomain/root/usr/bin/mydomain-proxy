@@ -40,20 +40,6 @@ EOF
     . /lib/functions.sh
     config_load mydomain
     
-    config_foreach() {
-        local cfg_type="$1"
-        shift
-        local func="$1"
-        shift
-        local section=""
-        local cfg_sections=""
-        
-        config_list_foreach "$cfg_type" "section" section
-        for section in $cfg_sections; do
-            eval $func "$section"
-        done
-    }
-    
     add_proxy_backend() {
         local cfg="$1"
         
@@ -75,14 +61,15 @@ EOF
         # Determine protocol
         local mode="http"
         local ssl_enabled=0
-        if [ "$protocol" = "https" ] || [ "$protocol" = "websocket" ]; then
-            mode="tcp"
+        if [ "$protocol" = "https" ]; then
             ssl_enabled=1
+        elif [ "$protocol" = "websocket" ]; then
+            # WebSocket can be handled in HTTP mode with proper configuration
+            ssl_enabled=0
         fi
         
         # Add frontend
         echo "frontend ${cfg}_front" >> "$cfg_file"
-        echo "    bind *:$frontend_port" >> "$cfg_file"
         echo "    mode $mode" >> "$cfg_file"
         
         # Add SSL if needed
@@ -92,6 +79,9 @@ EOF
             if [ -n "$cert_path" ] && [ -n "$key_path" ] && [ -f "$cert_path" ] && [ -f "$key_path" ]; then
                 echo "    bind *:$frontend_port ssl crt $cert_path" >> "$cfg_file"
             fi
+        else
+            # Add non-SSL binding
+            echo "    bind *:$frontend_port" >> "$cfg_file"
         fi
         
         # Add ACL rules if any
